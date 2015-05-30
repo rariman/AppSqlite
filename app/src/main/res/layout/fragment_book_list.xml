@@ -1,0 +1,22 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.rariman.appsqlite.BookListFragment">
+
+    <ImageButton
+        android:layout_width="@dimen/round_button_diameter"
+        android:layout_height="@dimen/round_button_diameter"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="@dimen/add_button_margin"
+        android:layout_marginRight="@dimen/add_button_margin"
+        android:id="@+id/add_button"
+        android:src="@android:drawable/ic_input_add"
+        android:tint="@android:color/white"
+        android:elevation="@dimen/elevation_low"
+        android:background="@drawable/oval_ripple"
+        android:stateListAnimator="@anim/button_elevation" />
+
+
+</FrameLayout>

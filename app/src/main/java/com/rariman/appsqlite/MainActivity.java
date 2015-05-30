@@ -1,6 +1,8 @@
 package com.rariman.appsqlite;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,10 +10,18 @@ import android.view.MenuItem;
 
 public class MainActivity extends Activity {
 
-     @Override
+    BookListFragment bookListFragment;
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        BookListFragment bookListFragment = new BookListFragment();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.frame_container, bookListFragment);
+        fragmentTransaction.commit();
+
     }
 
     @Override
