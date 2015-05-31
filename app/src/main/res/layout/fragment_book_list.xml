@@ -10,7 +10,7 @@
         android:scrollbars="vertical"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        />
+         />
 
     <ImageButton
         android:layout_width="@dimen/round_button_diameter"
