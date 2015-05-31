@@ -3,7 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.rariman.appsqlite.BookListFragment">
+    tools:context="com.rariman.appsqlite.fragments.BookListFragment">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/bookRecyclerView"
+        android:scrollbars="vertical"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        />
 
     <ImageButton
         android:layout_width="@dimen/round_button_diameter"
@@ -16,7 +23,8 @@
         android:tint="@android:color/white"
         android:elevation="@dimen/elevation_low"
         android:background="@drawable/oval_ripple"
-        android:stateListAnimator="@anim/button_elevation" />
+        android:stateListAnimator="@anim/button_elevation"
+        android:contentDescription="Add new book." />
 
 
 </FrameLayout>
