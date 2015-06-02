@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/default_title"
-        android:id="@+id/tileTextView"
+        android:id="@+id/titleTextView"
         android:textStyle="bold"
         android:typeface="serif"
         android:textColor="@color/title_color"
