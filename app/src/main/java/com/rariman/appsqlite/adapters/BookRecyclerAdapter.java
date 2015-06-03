@@ -12,12 +12,9 @@ import com.rariman.appsqlite.domain.Book;
 
 import java.util.List;
 
-/**
- * Created by Rariman on 01/06/2015.
- */
 public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapter.BookViewHolder> {
 
-    List<Book> bookList;
+    private List<Book> bookList;
 
     public BookRecyclerAdapter(List<Book> bookList) {
         this.bookList = bookList;
@@ -26,9 +23,9 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
     @Override
     public BookViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Log.d("LOG", "onCreateViewHolder");
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.book_short_description, parent, false);
-        BookViewHolder bookViewHolder = new BookViewHolder(view);
-        return bookViewHolder;
+        View view;
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.book_short_description, parent, false);
+        return new BookViewHolder(view);
     }
 
     @Override

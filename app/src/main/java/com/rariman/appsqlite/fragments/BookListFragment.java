@@ -9,6 +9,9 @@ import android.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
@@ -51,6 +54,7 @@ public class BookListFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager;
 
         View view = inflater.inflate(R.layout.fragment_book_list, container, false);
+        setHasOptionsMenu(true);
 
         addButton = view.findViewById(R.id.add_button);
         addButton.setOutlineProvider(addButtonOutlineProvider);
@@ -77,5 +81,14 @@ public class BookListFragment extends Fragment {
         }
     };
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.book_list_menu, menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
 }
