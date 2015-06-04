@@ -2,6 +2,7 @@ package com.rariman.appsqlite.fragments;
 
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.graphics.Outline;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,10 +30,14 @@ import java.util.List;
  */
 public class BookListFragment extends Fragment {
 
+    interface BookListFragmentInterface{
+        void onAddNewBook();
+    }
+
     private View addButton;
     private RecyclerView bookRecyclerView;
     private List<Book> books;
-
+    private BookListFragmentInterface listener;
 
     public BookListFragment() {
         // Required empty public constructor
@@ -43,9 +48,6 @@ public class BookListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         books = new ArrayList<>();
-        books.add(new Book("Harry Potter", "Hogwarts"));
-        books.add(new Book("The Lord of the Rings", "Frodo"));
-
     }
 
     @Override
@@ -59,6 +61,7 @@ public class BookListFragment extends Fragment {
         addButton = view.findViewById(R.id.add_button);
         addButton.setOutlineProvider(addButtonOutlineProvider);
         addButton.setClipToOutline(true);
+        addButton.setOnClickListener(onAddButtonClick);
 
         bookRecyclerView = (RecyclerView)view.findViewById(R.id.bookRecyclerView);
         bookRecyclerView.setHasFixedSize(true);
@@ -81,6 +84,13 @@ public class BookListFragment extends Fragment {
         }
     };
 
+    View.OnClickListener onAddButtonClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            listener.onAddNewBook();
+        }
+    };
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -90,5 +100,23 @@ public class BookListFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            listener = (BookListFragmentInterface) activity;
+        }
+        catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement BookListFragmentInterface");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
     }
 }
