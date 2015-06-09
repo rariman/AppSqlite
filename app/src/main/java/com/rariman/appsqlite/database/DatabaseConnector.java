@@ -2,13 +2,47 @@ package com.rariman.appsqlite.database;
 
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.rariman.appsqlite.domain.Book;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseConnector{
     private static final String DATABASE_NAME = "BookDataBase";
     private static final int DATABASE_VERSION = 1;
+    private DatabaseOpenHelper databaseOpenHelper;
+    private SQLiteDatabase database;
 
+    public DatabaseConnector(Context context) {
+        databaseOpenHelper = new DatabaseOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    public void open() throws SQLException
+    {
+        database = databaseOpenHelper.getWritableDatabase();
+    }
+
+    public void close()
+    {
+        if (database != null)
+            database.close();
+    }
+
+    public List<Book> getAllBooks()
+    {
+        List<Book> bookList = new ArrayList<>();
+        String[] columns = {DatabaseOpenHelper.COLUMN_ID, DatabaseOpenHelper.COLUMN_TITLE, DatabaseOpenHelper.DESCRIPTION_TITLE};
+        Cursor cursor = database.query(DATABASE_NAME, columns, null, null, null, null, DatabaseOpenHelper.COLUMN_TITLE);
+
+        //TODO: get data from cursor and add it to bookList
+
+        return bookList;
+    }
 
     private class DatabaseOpenHelper extends SQLiteOpenHelper
     {
