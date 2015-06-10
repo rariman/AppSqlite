@@ -37,9 +37,20 @@ public class DatabaseConnector{
     {
         List<Book> bookList = new ArrayList<>();
         String[] columns = {DatabaseOpenHelper.COLUMN_ID, DatabaseOpenHelper.COLUMN_TITLE, DatabaseOpenHelper.DESCRIPTION_TITLE};
-        Cursor cursor = database.query(DATABASE_NAME, columns, null, null, null, null, DatabaseOpenHelper.COLUMN_TITLE);
+        Cursor cursor = database.query(DatabaseOpenHelper.TABLE_BOOKS, columns, null, null, null, null, DatabaseOpenHelper.COLUMN_TITLE);
 
-        //TODO: get data from cursor and add it to bookList
+        while (cursor.moveToNext())
+        {
+            int index0 = cursor.getColumnIndex(DatabaseOpenHelper.COLUMN_TITLE);
+            int index1 = cursor.getColumnIndex(DatabaseOpenHelper.DESCRIPTION_TITLE);
+
+            String title = cursor.getString(index0);
+            String description = cursor.getString(index1);
+
+            Book book = new Book(title, description);
+
+            bookList.add(book);
+        }
 
         return bookList;
     }
@@ -58,7 +69,7 @@ public class DatabaseConnector{
         @Override
         public void onCreate(SQLiteDatabase db) {
             String createQuery = "CREATE TABLE " + TABLE_BOOKS +
-                                 "(" + COLUMN_ID + " integer primary key autoincrement" +
+                                 "(" + COLUMN_ID + " integer primary key autoincrement," +
                                  COLUMN_TITLE + " TEXT, " +
                                  DESCRIPTION_TITLE + " TEXT);";
             db.execSQL(createQuery);

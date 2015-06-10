@@ -4,6 +4,7 @@ package com.rariman.appsqlite.fragments;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Outline;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -19,6 +20,7 @@ import android.view.ViewOutlineProvider;
 
 import com.rariman.appsqlite.R;
 import com.rariman.appsqlite.adapters.BookRecyclerAdapter;
+import com.rariman.appsqlite.database.DatabaseConnector;
 import com.rariman.appsqlite.domain.Book;
 
 import java.util.ArrayList;
@@ -30,7 +32,7 @@ import java.util.List;
  */
 public class BookListFragment extends Fragment {
 
-    interface BookListFragmentInterface{
+    public interface BookListFragmentInterface{
         void onAddNewBook();
     }
 
@@ -38,6 +40,7 @@ public class BookListFragment extends Fragment {
     private RecyclerView bookRecyclerView;
     private List<Book> books;
     private BookListFragmentInterface listener;
+    private BookRecyclerAdapter bookRecyclerAdapter;
 
     public BookListFragment() {
         // Required empty public constructor
@@ -67,12 +70,19 @@ public class BookListFragment extends Fragment {
         bookRecyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity());
         bookRecyclerView.setLayoutManager(layoutManager);
-        BookRecyclerAdapter bookRecyclerAdapter = new BookRecyclerAdapter(books);
+        bookRecyclerAdapter = new BookRecyclerAdapter(books);
         bookRecyclerView.setAdapter(bookRecyclerAdapter);
 
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        GetBooksTask getBooksTask = new GetBooksTask();
+        getBooksTask.execute((Object[]) null);
     }
 
     ViewOutlineProvider addButtonOutlineProvider = new ViewOutlineProvider() {
@@ -90,6 +100,35 @@ public class BookListFragment extends Fragment {
             listener.onAddNewBook();
         }
     };
+
+    private void setBooks(List<Book> bookList)
+    {
+        this.books = bookList;
+        bookRecyclerAdapter.notifyDataSetChanged();
+    }
+
+    private class GetBooksTask extends AsyncTask<Object, Object, List<Book>>
+    {
+        DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
+
+        @Override
+        protected List<Book> doInBackground(Object... params) {
+            databaseConnector.open();
+            return databaseConnector.getAllBooks();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(List<Book> books) {
+            super.onPostExecute(books);
+            setBooks(books);
+            databaseConnector.close();
+        }
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

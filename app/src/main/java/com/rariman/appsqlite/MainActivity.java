@@ -9,16 +9,16 @@ import android.view.MenuItem;
 import com.rariman.appsqlite.fragments.BookListFragment;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements BookListFragment.BookListFragmentInterface{
 
-    BookListFragment bookListFragment;
+    private BookListFragment bookListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BookListFragment bookListFragment = new BookListFragment();
+        bookListFragment = new BookListFragment();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.frame_container, bookListFragment);
         fragmentTransaction.commit();
@@ -45,5 +45,10 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onAddNewBook() {
+
     }
 }
