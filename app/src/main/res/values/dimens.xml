@@ -10,4 +10,6 @@
     <dimen name="description_horizontal_margin">10dp</dimen>
     <dimen name="description_layout_vertical_margin">8dp</dimen>
     <dimen name="separator_view_thickness">0.5dp</dimen>
+    <dimen name="bottom_edittext_margin">30dp</dimen>
+    <dimen name="horizontal_edittext_margin">8dp</dimen>
 </resources>
