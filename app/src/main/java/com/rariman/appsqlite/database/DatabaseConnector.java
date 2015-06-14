@@ -1,6 +1,7 @@
 package com.rariman.appsqlite.database;
 
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -53,6 +54,18 @@ public class DatabaseConnector{
         }
 
         return bookList;
+    }
+
+    public long insertNewBook(String title, String description)
+    {
+        ContentValues newBook = new ContentValues();
+        newBook.put(DatabaseOpenHelper.COLUMN_TITLE, title);
+        newBook.put(DatabaseOpenHelper.DESCRIPTION_TITLE, description);
+        open();
+        long newRowId = database.insert(DatabaseOpenHelper.TABLE_BOOKS, null, newBook);
+        close();
+
+        return newRowId;
     }
 
     private class DatabaseOpenHelper extends SQLiteOpenHelper

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,9 +39,9 @@ public class BookListFragment extends Fragment {
 
     private View addButton;
     private RecyclerView bookRecyclerView;
-    private List<Book> books;
+    private List<Book> books = new ArrayList<>();
     private BookListFragmentInterface listener;
-    private BookRecyclerAdapter bookRecyclerAdapter;
+    //private BookRecyclerAdapter bookRecyclerAdapter;
 
     public BookListFragment() {
         // Required empty public constructor
@@ -60,6 +61,7 @@ public class BookListFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_book_list, container, false);
         setHasOptionsMenu(true);
+        setRetainInstance(true);
 
         addButton = view.findViewById(R.id.add_button);
         addButton.setOutlineProvider(addButtonOutlineProvider);
@@ -67,12 +69,8 @@ public class BookListFragment extends Fragment {
         addButton.setOnClickListener(onAddButtonClick);
 
         bookRecyclerView = (RecyclerView)view.findViewById(R.id.bookRecyclerView);
-        bookRecyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity());
         bookRecyclerView.setLayoutManager(layoutManager);
-        bookRecyclerAdapter = new BookRecyclerAdapter(books);
-        bookRecyclerView.setAdapter(bookRecyclerAdapter);
-
 
         // Inflate the layout for this fragment
         return view;
@@ -81,8 +79,7 @@ public class BookListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        GetBooksTask getBooksTask = new GetBooksTask();
-        getBooksTask.execute((Object[]) null);
+        updateListBook();
     }
 
     ViewOutlineProvider addButtonOutlineProvider = new ViewOutlineProvider() {
@@ -104,7 +101,22 @@ public class BookListFragment extends Fragment {
     private void setBooks(List<Book> bookList)
     {
         this.books = bookList;
-        bookRecyclerAdapter.notifyDataSetChanged();
+        BookRecyclerAdapter bookRecyclerAdapter = new BookRecyclerAdapter(books);
+        bookRecyclerAdapter.setOnItemClickListener(onBookListItemClick);
+        bookRecyclerView.setAdapter(bookRecyclerAdapter);
+    }
+
+    BookRecyclerAdapter.onItemClickListener onBookListItemClick = new BookRecyclerAdapter.onItemClickListener() {
+        @Override
+        public void OnItemClick(View view, int position) {
+
+        }
+    };
+
+    public void updateListBook()
+    {
+        GetBooksTask getBooksTask = new GetBooksTask();
+        getBooksTask.execute((Object[]) null);
     }
 
     private class GetBooksTask extends AsyncTask<Object, Object, List<Book>>
@@ -115,11 +127,6 @@ public class BookListFragment extends Fragment {
         protected List<Book> doInBackground(Object... params) {
             databaseConnector.open();
             return databaseConnector.getAllBooks();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
         }
 
         @Override
@@ -158,4 +165,5 @@ public class BookListFragment extends Fragment {
         super.onDetach();
         listener = null;
     }
+
 }

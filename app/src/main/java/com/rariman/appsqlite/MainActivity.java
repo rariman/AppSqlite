@@ -25,6 +25,9 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
         toolbar = (Toolbar)findViewById(R.id.toolbar);
 
+        if (savedInstanceState != null)
+            return;
+
         if (toolbar != null)
         {
             setSupportActionBar(toolbar);
@@ -47,8 +50,8 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     }
 
     @Override
-    public void onAddCompleted(long rowID) {
-
+    public void onAddCompleted() {
+        getFragmentManager().popBackStack();
     }
 
     @Override

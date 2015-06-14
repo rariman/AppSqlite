@@ -9,5 +9,8 @@
     <string name="search_menu_title">Search</string>
     <string name="empty_title">Title field is empty!</string>
     <string name="empty_description">Description field is empty!</string>
+    <string name="add_done">Done</string>
+    <string name="edit_book">Edit</string>
+    <string name="delete_book">Delete</string>
 
 </resources>

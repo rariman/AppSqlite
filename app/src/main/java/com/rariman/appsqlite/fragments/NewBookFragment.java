@@ -2,6 +2,7 @@ package com.rariman.appsqlite.fragments;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -9,11 +10,16 @@ import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.rariman.appsqlite.R;
+import com.rariman.appsqlite.database.DatabaseConnector;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,7 +27,7 @@ import com.rariman.appsqlite.R;
 public class NewBookFragment extends Fragment implements View.OnKeyListener{
 
     public interface NewBookFragmentInterface{
-        void onAddCompleted(long rowID);
+        void onAddCompleted();
     }
 
     private TextInputLayout titleTextInputLayout, descriptionTextInputLayout;
@@ -35,6 +41,8 @@ public class NewBookFragment extends Fragment implements View.OnKeyListener{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+
         View view = inflater.inflate(R.layout.fragment_new_book, container, false);
 
         titleTextInputLayout = (TextInputLayout)view.findViewById(R.id.newTitleTextInputLayout);
@@ -105,15 +113,46 @@ public class NewBookFragment extends Fragment implements View.OnKeyListener{
 
     private class AddBookTask extends AsyncTask<Object, Object, Long>
     {
+        DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
+        String newTitle, newDescription;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            newTitle = titleEditText.getText().toString();
+            newDescription = descriptionEditText.getText().toString();
+        }
+
         @Override
         protected Long doInBackground(Object... params) {
-            return null;
+            return  databaseConnector.insertNewBook(newTitle, newDescription);
         }
 
         @Override
         protected void onPostExecute(Long aLong) {
             super.onPostExecute(aLong);
-            listener.onAddCompleted(aLong);
+            InputMethodManager inputMethodManager = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getView().getWindowToken(),0);
+
+            listener.onAddCompleted();
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.book_add_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId())
+        {
+            case R.id.add_done_item:
+                checkEditTexts();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
